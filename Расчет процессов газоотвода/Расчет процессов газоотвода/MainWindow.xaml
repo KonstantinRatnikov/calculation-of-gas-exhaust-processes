@@ -1,0 +1,168 @@
+﻿<Window x:Class="Расчет_процессов_газоотвода.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:local="clr-namespace:Расчет_процессов_газоотвода"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        WindowState="Maximized"
+        Height="675" Width="1200">
+    <Window.Resources>
+        <Style TargetType="TextBox" x:Key="TextBoxPointStyle">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="75"/>
+        </Style>
+        <Style TargetType="StackPanel" x:Key="StackPanelinputStyle">
+            <Setter Property="Margin" Value="10 2 2 5"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxInputStyle">
+            <Setter Property="Width" Value="75"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition MaxHeight="60"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3">
+            <Image MaxHeight="600" Source="Resources/tanker1.jpg" Stretch="Uniform"></Image>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3">
+            <Image MaxHeight="600" Source="Resources/tanker2.jpg" Stretch="Uniform" />
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3">
+            <TextBlock TextWrapping="Wrap" Text="1 – танкер; 2 – двойной корпус; 3 – узел регулируемого выпуска паров; 4 – узел защиты причальных сооружений; 5 – стендер отвода газовой фазы; 6 – запорно-регулирующая арматура; 7 – детонационный преградитель; 8 – трубопровод отвода газовой фазы; 9 – установка рекуперации паров; 10 – свеча рассеивания." />
+        </Grid>
+
+        <ScrollViewer  HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            
+            
+            <StackPanel Orientation="Vertical"   Margin="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Ввести" Command="{Binding EnterCommand}" Width="100" Height="30" Margin="10"/>
+                    <Button Content="Сохранить точки" Command="{Binding SaveCommand}" Width="100" Height="30"/>
+                </StackPanel>
+                <CheckBox x:Name="checkBoxLoadingSchedule" Content="График погрузки" Checked="checkBoxLoadingScheduleChecked" Unchecked="checkBoxLoadingScheduleUnchecked" />
+                <StackPanel x:Name="stackPanelLoadingSchedule" Visibility="Collapsed" MaxWidth="300" HorizontalAlignment="Left" >
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="buttonLoadingScheduleAddPoint" Width="100" Content="Добавить точку" Click="buttonLoadingScheduleAddPoint_Click"></Button>
+                        </StackPanel>
+                        <StackPanel x:Name="stackPanelPoints">
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Суммарный объем погрузки составит "></TextBlock>
+                    <TextBlock Text="{Binding InformationLoadingVolume}" FontWeight="Bold"/>
+                    <TextBlock Text=" м3"/>
+                </StackPanel>
+                <CheckBox x:Name="checkBoxGasExhaustSystem" Content="ИСХОДНЫЕ ДАННЫЕ ПО ГАЗООТВОДОЙ СИСТЕМЕ" Checked="checkBoxGasExhaustSystemChecked" Unchecked="checkBoxGasExhaustSystemUnchecked" />
+                <StackPanel x:Name="stackPanelGasExhaustSystem" Visibility="Collapsed" >
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="Начальное давление в газовом пространстве танкера"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.Pn, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="Давление в конечной точке системы отвода паров Pк"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.Pk, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock MaxWidth="300" TextWrapping="Wrap" Text="Jн- плотность потока массы испаряющейся нефти в начальный момент времени"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.Jn, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="F-площадь поверхности испарения, м2"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.F, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="M ГВС- молярная масса газовоздушной смеси, кг/(кмоль)"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.Mgvs, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="T- температура газовоздушной смеси, К"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.T, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="ξ – отношение конечного значения массоотдачи к начальному"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.ksi, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="λ – коэффициент гидравлического сопротивления"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.lambda, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="Lэф   – эффективная длина газоотводной системы, м"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.L, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                        <TextBlock Text="D – внутренний диаметр газоотводной системы, м"></TextBlock>
+                        <TextBox Text="{ Binding PressureInsideTanker.D, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <CheckBox x:Name="checkBoxLiquidCargo" Content="ИСХОДНЫЕ ДАННЫЕ ПО НАЛИВНОМУ ГРУЗУ" Checked="checkBoxLiquidCargoChecked" Unchecked="checkBoxLiquidCargoUnchecked" />
+                <StackPanel x:Name="stackPanelLiquidCargo" Visibility="Collapsed" >
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <StackPanel Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
+            <TextBlock Text="Поиск точки на графиках" HorizontalAlignment="Center"></TextBlock>
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                <TextBlock Text="Ввод времени t "></TextBlock>
+                <TextBox Text="{ Binding findT, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+            </StackPanel>
+            <Button Content="Найти" Command="{Binding FindPointsCommand}" HorizontalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                <TextBlock Text="Объемный расход налива Qн "></TextBlock>
+                <TextBox Text="{ Binding findQn, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                <TextBlock Text="Коэффициент превышения "></TextBlock>
+                <TextBox Text="{ Binding findKp, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                <TextBlock Text="Расход газовоздушной смеси в трубопроводе газовой фазы "></TextBlock>
+                <TextBox Text="{ Binding findQgvs, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Style="{StaticResource StackPanelinputStyle}">
+                <TextBlock Text="Давление в газовом пространстве P "></TextBlock>
+                <TextBox Text="{ Binding findP, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextBoxInputStyle}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <Frame NavigationUIVisibility="Hidden" Content="{Binding GraphTankerLoading}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2">
+            <Frame NavigationUIVisibility="Hidden" Content="{Binding GraphPageKp}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2">
+            <Frame NavigationUIVisibility="Hidden" Content="{Binding GraphPageQgvs}" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2">
+            <Frame NavigationUIVisibility="Hidden" Content="{Binding GraphPage}" />
+        </StackPanel>
+    </Grid>
+</Window>
